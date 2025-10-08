@@ -16,7 +16,10 @@ def exe1():
     step = 0.0005
     samples = int(end / step)
 
+    # a)
     signal = np.linspace(start, end, samples)
+
+    # b)
     fx_res = []
     fy_res = []
     fz_res = []
@@ -31,6 +34,7 @@ def exe1():
     axs[1].plot(signal, fy_res)
     axs[2].plot(signal, fz_res)
 
+    # c)
     freq = 200
     samples = int(freq * end)
     signal2 = np.linspace(start, end, samples)
@@ -54,11 +58,14 @@ def exe1():
 def sinusoid(t, A, freq, delta):
     return A * np.sin(2 * np.pi * freq * t + delta)
 
-
 def shark_func(t, top):
     return np.mod(t, top)
 
+def square_func(t, top):
+    pass
+
 def exe2():
+    # a)
     start = 0
     end = 4.0
     samples = 1600
@@ -70,9 +77,10 @@ def exe2():
     for point in signal:
         res.append(sinusoid(point, 1.0, freq, 0.0))
 
-    fig, axs = plt.subplots(3)
+    fig, axs = plt.subplots(4)
     axs[0].stem(signal, res)
 
+    # b)
     start = 0
     end = 3.0
     freq = 800
@@ -86,6 +94,7 @@ def exe2():
 
     axs[1].plot(signal, res)
 
+    # c)
     start = 0
     end = 10.0
     freq = 240
@@ -100,12 +109,62 @@ def exe2():
 
     axs[2].plot(signal, res)
 
+    # d)
+    start = 0
+    end = 10.0
+    freq = 300
+    samples = 1500
+
+    signal = np.linspace(start, end, samples)
+    res = []
+
+    for point in signal:
+        res.append(np.sign(sinusoid(point, 1, freq, 0)))
+
+    axs[3].plot(signal, res)
+
     plt.savefig("images/ex2.pdf", format="pdf")
     plt.show()
 
+    # e)
+    rand_signal = np.random.rand(128, 128)
+    plt.imshow(rand_signal)
+    plt.savefig("images/ex2-rand.pdf", format="pdf")
+    plt.show()
+
+    # f)
+    signal_2d = np.zeros((128, 128))
+    for i in range(128):
+        for j in range(128):
+            signal_2d[i][j] = euler_identity(i + 1, j + 1)
+
+    plt.imshow(signal_2d)
+    plt.savefig("images/ex2-mysignal.pdf", format="pdf")
+    plt.show()
+
+# not really but close
+def euler_identity(i, j):
+    # this one is kind of cool too
+    # return np.exp(np.pi * 1j * (j % i))
+
+    return np.exp(np.pi * 1j * (j % i) / i)
+
+def exe3():
+    # a)
+    # Avand 2000 Hz inseamna ca intr-o secunda am facut 2000 esantioane
+    # delimitate egal.
+    # Deci se esantioneaza la fiecare 1 / 2000 = 0.005 secunde
+
+    # b) Avem 2000 esantioane pe secunda, 1 ora are 3600 secunde
+    # deci 7_200_000 esantioane deci 7_200_000 * 4 biti
+    # 3_600_000 B = 3600 KB = 3.6 MB
+
+    print("Check code comments")
+
 def main():
-    # exe1()
+    exe1()
     exe2()
+    exe3()
 
 if __name__ == "__main__":
     main()
