@@ -22,7 +22,7 @@ def main():
         axs[i].plot(ims)
         axs[i].plot(res)
 
-    herm_four = np.transpose(np.conjugate(four_mat))
+    herm_four = np.matrix(four_mat).getH()
     mult_unit = herm_four * four_mat
     for i in range(N):
         for j in range(N):
