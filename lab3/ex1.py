@@ -22,14 +22,10 @@ def main():
         axs[i].plot(ims)
         axs[i].plot(res)
 
-    herm_four = np.matrix(four_mat).getH()
+    herm_four = np.conjugate(np.matrix(four_mat)).T
     mult_unit = herm_four * four_mat
-    for i in range(N):
-        for j in range(N):
-            print("({}, {})".format(four_mat[i][j].real, four_mat[i][j].imag), end=" ")
-        print()
 
-    print(np.allclose(mult_unit, np.identity(N)))
+    print(np.allclose(mult_unit, N * np.identity(N)))
     plt.savefig("images/ex1.pdf", format="pdf")
     plt.show()
 
