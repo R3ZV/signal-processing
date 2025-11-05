@@ -21,7 +21,7 @@ def main():
         fft_res = np.abs(np.fft.fft(group))
         fft_res_mat[i] = fft_res[:group_size // 2]
 
-    plt.pcolormesh(fft_res_mat.T)
+    plt.pcolormesh(10 * np.log10(fft_res_mat.T))
     plt.ylabel("Frequency [Hz]")
     plt.xlabel("Time [sec]")
     plt.colorbar(label="Intensity [dB]")
