@@ -75,10 +75,10 @@ def main():
         furr_res[i] = 0
         furr_res[N - i - 1] = 0
     furr_filtered = np.abs(np.fft.ifft(furr_res))
-    axs[0].plot(np.arange(N), furr_init)
-    axs[0].title.set_text("Initial Fourier")
+    axs[0].plot(np.arange(N), data)
+    axs[0].title.set_text("Initial signal")
     axs[1].plot(np.arange(N), furr_filtered)
-    axs[1].title.set_text("Filtered Fourier")
+    axs[1].title.set_text("Filtered signal")
     plt.savefig("images/i.pdf")
     plt.show()
 
