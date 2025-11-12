@@ -65,7 +65,7 @@ def main():
     # realitate poate si vara cand vine perioada de mers la mare o sa existe un spike similar.
 
     # i)
-    furr_res = np.abs(np.fft.fft(data))
+    furr_res = np.fft.fft(data)
     furr_init = furr_res
 
     fig, axs = plt.subplots(2)
