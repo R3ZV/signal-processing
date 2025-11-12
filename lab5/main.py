@@ -19,9 +19,9 @@ def main():
     freqs = freq_s * np.linspace(0, N // 2, N // 2) / N
 
     furr_res = np.abs((np.fft.fft(data) / N))[:N//2]
-    plt.savefig("images/d.pdf")
     plt.yscale("log");
     plt.plot(freqs, furr_res)
+    plt.savefig("images/d.pdf")
     plt.show()
 
     # e)
@@ -29,9 +29,9 @@ def main():
     print(mean != 0)
     norm_data = data - mean
     furr_res2 = np.abs((np.fft.fft(norm_data) / N))[:N//2]
-    plt.savefig("images/e.pdf")
     plt.plot(freqs, furr_res2)
     plt.yscale("log");
+    plt.savefig("images/e.pdf")
     plt.show()
 
     # f)
