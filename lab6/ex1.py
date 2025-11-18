@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+B = 1
+
 def signal_f(t):
-    return np.sinc(1 * t) * np.sinc(1 * t)
+    return np.sinc(B * t) * np.sinc(B * t)
 
 def main():
     freq = [1, 1.5, 2, 4]
@@ -16,7 +18,7 @@ def main():
     plt.show()
 
     # b)
-    signals = [0 for i in range(len(freq))]
+    signals = [[] for i in range(len(freq))]
     for i in range(len(freq)):
         samples = int(freq[i] * (end_idx - start_idx))
 
@@ -30,18 +32,19 @@ def main():
     fig, axs = plt.subplots(len(freq))
     for i in range(len(freq)):
         xs[i] = np.vectorize(signal_f)(signals[i])
-        xs_hat = [ [] for i in range(len(signals[i]))]
-
         TS = 1 / freq[i]
 
-        for t in signals[i]:
-            for j in range(len(freq)):
-                print(len(np.dot(xs[j], np.sinc((t - j * TS) / TS))))
-                xs_hat[j].append(np.dot(xs[j], np.sinc((t - j * TS) / TS)))
+        def rec(t):
+            kernel = np.sinc(B * (t - signals[i]) / TS)
+            return np.dot(xs[i], kernel)
 
-        axs[i].stem(signals[i], xs[i])
-        axs[i].plot(signals[i], xs_hat[i], "g--")
+        xs_hat = []
+        for t in signal:
+            xs_hat.append(rec(t))
+
         axs[i].plot(signal, res)
+        axs[i].stem(signals[i], xs[i])
+        axs[i].plot(signal, xs_hat, "g--")
 
 
     plt.savefig("images/ex1-b.pdf")
