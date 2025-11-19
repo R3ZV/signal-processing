@@ -24,8 +24,8 @@ def main():
     # c)
     # In datele din Train.csv se esantioneaza o data la 1 ora
     samp_freq = 1 / 3600
-    wn_freq = samp_freq / 7 # not sure how to choose this
     nyq_freq = samp_freq / 2
+    wn_freq = (samp_freq / 7) / nyq_freq
 
     # d)
     deg = 5
@@ -33,13 +33,35 @@ def main():
     res_butter = scipy.signal.butter(deg, wn_freq, btype='low')
     res_cheb = scipy.signal.cheby1(deg, rp, wn_freq, btype='low')
 
-    _, axs = plt.subplots(2)
-    axs[0].plot(res_butter)
-    axs[1].plot(res_cheb)
+    filt_butter = scipy.signal.filtfilt(*res_butter, signal)
+    filt_cheb = scipy.signal.filtfilt(*res_cheb, signal)
+
+    # e)
+    plt.plot(np.arange(len(signal)), signal)
+    plt.plot(np.arange(len(filt_butter)), filt_butter, c='g')
+    plt.plot(np.arange(len(filt_cheb)), filt_cheb, c='r')
     plt.savefig("images/ex6-b.pdf")
     plt.show()
 
-    # e)
+    # As alege butter pentru ca pare a urmari mai bine trendul semnalului
+    # original.
+
     # f)
+    rps = [3, 5, 9, 11]
+    degs = [2, 9, 13]
+
+    for r in rps:
+        for d in degs:
+            res_butter = scipy.signal.butter(d, wn_freq, btype='low')
+            res_cheb = scipy.signal.cheby1(d, r, wn_freq, btype='low')
+
+            filt_butter = scipy.signal.filtfilt(*res_butter, signal)
+            filt_cheb = scipy.signal.filtfilt(*res_cheb, signal)
+
+            plt.plot(np.arange(len(signal)), signal)
+            plt.plot(np.arange(len(filt_butter)), filt_butter, c='g')
+            plt.plot(np.arange(len(filt_cheb)), filt_cheb, c='r')
+            plt.savefig(f"images/ex6-f-r{r}-d{d}.pdf")
+            plt.show()
 
 main()
