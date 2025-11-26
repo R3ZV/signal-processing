@@ -122,6 +122,32 @@ def main():
     plt.imshow(rev_img, cmap=plt.cm.gray)
     plt.show()
 
+    # 3)
+    img_raton = datasets.face(gray=True)
+
+    pixel_noise = 200
+    noise = np.random.randint(-pixel_noise, high=pixel_noise+1, size=img_raton.shape)
+    img_raton_noise = img_raton + noise
+
+    curr_snr = np.mean(img_raton.astype(np.float64) ** 2) / np.mean(noise.astype(np.float64) ** 2)
+    print(f"Before SNR: {curr_snr}")
+
+    fft_raton2 = np.fft.fft2(img_raton_noise)
+    freq_max = 900_000
+
+    for i in range(len(fft_raton2)):
+        for j in range(len(fft_raton2[i])):
+            if np.abs(fft_raton2[i][j]) >= freq_max:
+                fft_raton2[i][j] = 0;
+
+    rev_img = np.real(np.fft.ifft2(fft_raton2))
+    plt.savefig("images/ex3.pdf")
+    plt.imshow(rev_img, cmap=plt.cm.gray)
+    plt.show()
+
+    curr_snr = np.mean(rev_img.astype(np.float64) ** 2) / np.mean(noise.astype(np.float64) ** 2)
+    print(f"After SNR: {curr_snr}")
+
 
 if __name__ == "__main__":
     main()
