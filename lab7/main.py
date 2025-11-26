@@ -68,7 +68,7 @@ def main():
         for j in range(N):
             image_signal[i][j] = func1(i, j)
 
-    plt.savefig("images/func1.pdf")
+    plt.savefig("images/ex1-func1.pdf")
     plt.imshow(image_signal, cmap=plt.cm.gray)
     plt.colorbar()
     plt.show()
@@ -78,7 +78,7 @@ def main():
         for j in range(N):
             image_signal[i][j] = func2(i, j)
 
-    plt.savefig("images/func2.pdf")
+    plt.savefig("images/ex1-func2.pdf")
     plt.imshow(image_signal, cmap=plt.cm.gray)
     plt.colorbar()
     plt.show()
@@ -86,7 +86,7 @@ def main():
     image_signal = [np.zeros(N) for _ in range(N)]
     image_signal[0][5] = image_signal[0][N - 5] = 1
     rev_image = np.real(np.fft.ifft2(image_signal))
-    plt.savefig("images/func3.pdf")
+    plt.savefig("images/ex1-func3.pdf")
     plt.imshow(rev_image, cmap=plt.cm.gray)
     plt.colorbar()
     plt.show()
@@ -94,7 +94,7 @@ def main():
     image_signal = [np.zeros(N) for _ in range(N)]
     image_signal[5][0] = image_signal[N-5][0] = 1
     rev_image = np.real(np.fft.ifft2(image_signal))
-    plt.savefig("images/func4.pdf")
+    plt.savefig("images/ex1-func4.pdf")
     plt.imshow(rev_image, cmap=plt.cm.gray)
     plt.colorbar()
     plt.show()
@@ -102,28 +102,23 @@ def main():
     image_signal = [np.zeros(N) for _ in range(N)]
     image_signal[5][5] = image_signal[N-5][N-5] = 1
     rev_image = np.real(np.fft.ifft2(image_signal))
-    plt.savefig("images/func5.pdf")
+    plt.savefig("images/ex1-func5.pdf")
     plt.imshow(rev_image, cmap=plt.cm.gray)
     plt.colorbar()
     plt.show()
 
     # 2)
-    SNR = 3000
-    noise = 200
+    freq_max = 1_000_000
     img_raton = datasets.face(gray=True)
-    fft_img = np.fft.fft2(img_raton)
-    for i in range(len(fft_img)):
-        for j in range(len(fft_img[i])):
-            if fft_img[i][j] >= SNR:
-                fft_img[i][j] -= SNR
-                fft_img[i][len(fft_img[i]) - j - 1] -= SNR
-            else:
-                fft_img[i][j] += SNR
-                fft_img[i][len(fft_img[i]) - j - 1] += SNR
+    fft_raton = np.fft.fft2(img_raton)
 
+    for i in range(len(fft_raton)):
+        for j in range(len(fft_raton[i])):
+            if np.abs(fft_raton[i][j]) >= freq_max:
+                fft_raton[i][j] = 0;
 
-    rev_img = np.real(np.fft.ifft2(fft_img))
-    plt.savefig("images/func5.pdf")
+    rev_img = np.real(np.fft.ifft2(fft_raton))
+    plt.savefig("images/ex2.pdf")
     plt.imshow(rev_img, cmap=plt.cm.gray)
     plt.show()
 
