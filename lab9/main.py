@@ -61,6 +61,19 @@ def exp3(signal, alpha, beta, sigma):
 
     return pred, err
 
+def ma_model(signal, q):
+    N = len(signal)
+    ma = np.zeros(N)
+    errs = np.zeros(N)
+
+    for i in range(q - 1, N):
+        window = signal[i - q + 1 : i + 1]
+        mean_val = np.mean(window)
+        ma[i] = mean_val
+        errs[i] = signal[i] - mean_val
+
+    return ma, errs
+
 def main():
     N = 1000
     pixel_noise = 200
@@ -135,6 +148,17 @@ def main():
     print("Exp3: err={}, best_alpha={}, best_beta={}, best_sigma={}".format(err, alphas[best_alpha], betas[best_beta], sigmas[best_sigma]))
 
     plt.savefig("images/ex2.pdf")
+    plt.show()
+
+    q = 50
+    ma_res, errs = ma_model(signal, q)
+    plt.plot(time[q-1:], ma_res[q-1:])
+    plt.show()
+    plt.savefig("images/ex3-a.pdf")
+
+    plt.plot(time[q-1:], errs[q-1:])
+
+    plt.savefig("images/ex3-b.pdf")
     plt.show()
 
 
