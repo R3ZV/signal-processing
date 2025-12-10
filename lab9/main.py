@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
 
 def trend_func(t):
     return 0.420 * t * t + t * 0.6 + 0.9
@@ -159,6 +160,29 @@ def main():
     plt.plot(time[q-1:], errs[q-1:])
 
     plt.savefig("images/ex3-b.pdf")
+    plt.show()
+
+
+    best_aic = 99999
+    best_p = 0
+    best_q = 0
+    for p in np.arange(1, 20, 5):
+        for q in np.arange(1, 20, 5):
+            model = ARIMA(signal, order=(p, 0, q))
+            fit = model.fit()
+
+            if fit.aic < best_aic:
+                best_aic = fit.aic
+                best_p = p
+                best_q = q
+
+
+    model = ARIMA(signal, order=(best_p, 0, best_q))
+    res = model.fit()
+
+    plt.plot(signal)
+    plt.plot(res.predict())
+    plt.savefig("images/ex4.pdf")
     plt.show()
 
 
